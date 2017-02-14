@@ -1,5 +1,5 @@
 
-OBJS = main.o problem.o
+OBJS = main.o problem.o node.o tree.o
 CC = g++
 DEBUG = -g
 CFLAGS = -Wall -c $(DEBUG)
@@ -14,5 +14,10 @@ main.o : main.cpp problem.h
 problem.o : problem.cpp problem.h
 	$(CC) $(CFLAGS) problem.cpp
 
+node.o : node.cpp node.h
+	$(CC) $(CFLAGS) node.cpp
+
+tree.o : tree.cpp tree.h
+	$(CC) $(CFLAGS) tree.cpp
 clean: 
 	\rm *.o main

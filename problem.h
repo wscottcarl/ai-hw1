@@ -6,14 +6,19 @@
 class Problem
 {
 private: 
-	int depth;
-	int branch;
 	int board[9];
 public:
 	int getIndex(int);
 	void showBoard();
 	bool isSolved();
-	Problem* update(int*);
+	int findBlank();
+	int outOfRow();
+	int outOfCol();
+	Problem* up();
+	Problem* down();
+	Problem* left();
+	Problem* right();
+	Problem* swap(int, int);
 	Problem();
 	Problem(int*);
 };

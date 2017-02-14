@@ -1,9 +1,14 @@
 
 #include <iostream>
-#include <string.h>
 #include <stdlib.h>
 #include "problem.h"
+#include "node.h"
+#include "tree.h"
 #include <fstream>
+#include <vector>
+#include <string.h>
+#include <sstream>
+
 
 // should accept cmd line options
 // -t N 	generates N random test cases and solutions
@@ -14,21 +19,14 @@
 
 using namespace std;
 Problem* board;
+Node* node;
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
 
-// if -t option ticked
-// create an Nx10 table
-// for N rows, fillBoard(t[i])
-
-
-// if -i option ticked, ask for 10 characters
-// also prompt user to indicate blank space using 0 int
-// if any input isnt an int that's [0,9], retry (unless 'q', then quit)
-// also, if any input repeated, retry (unless 'q', then quit)
+// if -i option ticked, ask for board input
 	if(argc != 1) 
 	{
-		if(strcmp(argv[0], "-i"))
+		if(!strcmp(argv[1],"-i"))
 		{
 			int arr[9];
 			cout << "Enter your puzzle: " << endl;
@@ -48,28 +46,36 @@ int main(int argc, char* argv[]) {
 				}
 				else arr[i] = temp;
 			}
-			board = board->update(arr);
+			board = new Problem(arr);
+			board->showBoard();
+			board = board->up();
 			board->showBoard();
 			cout << "Solved: " << board->isSolved() << endl;
 		}
-	}
 
-// if -f option ticked
-// open FILE and read until end
-/*	if(argc != 1)
-	{
-		if(strcmp(argv[0],"-f"))
+// if -f option ticked, read from file where filename is provided
+		else if(!strcmp(argv[1],"-f"))
 		{
-			int dig;
-			FILE f = fopen(argv[1], "r");
-			if(f == NULL) perror ("Error opening file");
-			else dig = getint(f);
-			
+			cout << "File option ticked\n";
+			string line;
+			ifstream infile(argv[2]);
+			int n;
+			int v[9];
+			while(getline(infile,line)){
+				istringstream iss(line);
+				for(int i=0;i<9;i++)
+				{
+					iss >> n;
+					v[i] = n;
+				}
+//				board = new Problem(v,0,0);
+				node = new Node(new Problem(v), 0, 0, NULL, 0);
+			}
 		}
-	}*/
-
-// -p handled elsewhere
-
+	}
+	Tree* tree = new Tree(node);
+	tree->solve();
+	node->getState()->showBoard();
 // at this point you should have a board or a selection of boards ready for testing
 // call A*(board)
 
@@ -82,3 +88,28 @@ int main(int argc, char* argv[]) {
 
 	return 0;
 }
+/*
+Solution* aStarSearch(Problem *prob)
+{
+	return bestFirstSearch(prob, g+h);
+}
+
+Solution* bestFirstSearch(Problem *prob, evalFunction())
+{
+	// update the priority queue of nodes
+	return generalSearch(prob, queueingFunction());
+}
+
+Solution* generalSearch(Problem *prob, queueingFunction()) 
+{
+	if(prob->up()) 
+	while(!stack.isEmpty())
+	{
+		Problem *top = stack.pop();
+		if(top->isSolved()) return top;
+		
+	}
+	return solution;
+}
+
+*/
